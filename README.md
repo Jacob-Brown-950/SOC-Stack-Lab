@@ -7,9 +7,8 @@ The goal of this project is to set up a comprehensive Security Operations Center
 The core components of the stack include:
 
 Wazuh: Deployed as the primary Security Information and Event Management (SIEM) solution, Wazuh will provide real-time security monitoring, log analysis, and threat detection.
-Grafana: Integrated with Wazuh to visualize and analyze security metrics and logs through dynamic dashboards and graphical representations.
 
-This setup aims to monitor network activities effectively, detect potential security threats, and gain insights into system performance. The lab will serve as a practical environment for testing and refining SOC operations, enhancing my ability to manage and respond to security incidents in a controlled setting.
+Grafana: Separate Dashboard Integrated with Wazuh to visualize and analyze security metrics and logs through dynamic dashboards and graphical representations.
 
 ### Skills Learned
 [Bullet Points - Remove this afterwards]
