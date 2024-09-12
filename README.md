@@ -23,7 +23,7 @@ Grafana: Separate Dashboard Integrated with Wazuh to visualize and analyze secur
 - Security Information and Event Management (SIEM) system for log ingestion and analysis.
 - Pentesting tools to create realistic network traffic and attack scenarios.
 
-## Steps
+## Setting Up Wazuh
 
 1. Preparation
 Update and Upgrade System: Ensure the server’s package list and software are up-to-date.
@@ -49,4 +49,28 @@ Start Wazuh Dashboard: Enable and start the Wazuh Dashboard service.
 Service Mapping: Ensure that all services (Manager, Indexer, Dashboard) are correctly mapped to the server’s internal IP address or hostname. Update configuration files to reflect that all components are hosted on the same server.
 Network and Port Settings: Verify that the ports used by Wazuh components are open and correctly configured in the firewall and networking settings.
 Verify Connections: Ensure that the Wazuh Manager, Indexer, and Dashboard can communicate with each other correctly. Test and confirm that logs and metrics are flowing properly between the services.
+
+## Setting Up Grafana
+1. Configure Wazuh for Grafana Integration
+Verify Wazuh Indexer: Ensure that the Wazuh Indexer is properly configured and running, as Grafana will query data from it.
+Access Wazuh API: Confirm that the Wazuh API is accessible and properly configured to allow Grafana to pull data. The API endpoint is typically used for querying data.
+
+2. Add Wazuh as a Data Source in Grafana
+Navigate to Configuration > Data Sources.
+Click on Add data source.
+Select Wazuh or Elasticsearch (if Wazuh uses Elasticsearch as the backend).
+Configure Data Source:
+URL: Enter the URL of the Wazuh API or Elasticsearch instance. This is where Grafana will send queries to.
+Index Name: Specify the index pattern if you are using Elasticsearch.
+Authentication: Set up any required authentication methods if needed (e.g., API keys or credentials).
+Test Connection: Click Save & Test to verify that Grafana can connect to the Wazuh Indexer or Elasticsearch.
+
+3. Create Grafana Dashboards
+Create a New Dashboard:
+Go to the + icon in the sidebar and select Dashboard.
+Click Add new panel to start building visualizations.
+Configure Panels:
+Query Data: Use the query editor to fetch data from Wazuh or Elasticsearch. You can create queries to display logs, alerts, and other security metrics.
+Visualizations: Choose the type of visualizations you want (graphs, tables, charts) based on the data you are querying.
+Customize Panels: Configure the appearance and settings of each panel according to your needs.
 
