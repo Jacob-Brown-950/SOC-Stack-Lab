@@ -2,7 +2,7 @@
 
 ## Objective
 
-The goal of this project is to set up a comprehensive Security Operations Center (SOC) stack lab using open-source tools to enhance network monitoring and security analysis. The SOC stack will be implemented on a physical server in my home lab environment.
+The goal of this project is to set up a comprehensive Security Operations Center (SOC) stack lab using open-source tools to enhance network monitoring and security analysis. The SOC stack will be implemented on a physical server in my home lab environment. There is a much easier way to do this now, but I chose the older hands on way to refine my understanding of nodes.
 
 The core components of the stack include:
 
