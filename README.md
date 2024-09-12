@@ -24,12 +24,29 @@ Grafana: Separate Dashboard Integrated with Wazuh to visualize and analyze secur
 - Pentesting tools to create realistic network traffic and attack scenarios.
 
 ## Steps
-drag & drop screenshots here or use imgur and reference them using imgsrc
 
-Every screenshot should have some text explaining what the screenshot is about.
+1. Preparation
+Update and Upgrade System: Ensure the server’s package list and software are up-to-date.
+Install Dependencies: Install any required dependencies for Wazuh components.
 
-Example below.
+2. Install Wazuh Manager
+Add Wazuh Repository: Add the Wazuh GPG key and repository to the server.
+Install Wazuh Manager: Use the package manager to install the Wazuh Manager.
+Configure Wazuh Manager: Edit the configuration files (typically found in /var/ossec/etc/ossec.conf) to set up basic parameters and ensure the Manager is set to listen on the correct network interfaces and ports.
+Start Wazuh Manager: Enable and start the Wazuh Manager service.
 
-*Ref 1: Network Diagram*
+3. Install Wazuh Indexer
+Install Wazuh Indexer: Use the package manager to install the Wazuh Indexer.
+Configure Wazuh Indexer: Edit the configuration files to set up the Indexer. The configuration files are usually located in /etc/wazuh-indexer/. Ensure that the Indexer is configured to communicate with the Wazuh Manager and adjust settings to bind to the appropriate interfaces.
+Start Wazuh Indexer: Enable and start the Wazuh Indexer service.
 
-![image](https://github.com/user-attachments/assets/e290b9b3-a96d-4a4f-91fc-2b97eac98d39)
+4. Install Wazuh Dashboard
+Install Wazuh Dashboard: Use the package manager to install the Wazuh Dashboard.
+Configure Wazuh Dashboard: Edit the configuration files (found in /etc/wazuh-dashboard/) to map the Dashboard to the Wazuh Manager and Indexer. This includes setting the correct URLs and authentication details so that the Dashboard can communicate with the other Wazuh components.
+Start Wazuh Dashboard: Enable and start the Wazuh Dashboard service.
+
+5. Configuration Adjustments
+Service Mapping: Ensure that all services (Manager, Indexer, Dashboard) are correctly mapped to the server’s internal IP address or hostname. Update configuration files to reflect that all components are hosted on the same server.
+Network and Port Settings: Verify that the ports used by Wazuh components are open and correctly configured in the firewall and networking settings.
+Verify Connections: Ensure that the Wazuh Manager, Indexer, and Dashboard can communicate with each other correctly. Test and confirm that logs and metrics are flowing properly between the services.
+
