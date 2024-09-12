@@ -1,9 +1,15 @@
-# PROJECTNAME
+# SOC Stack Lab
 
 ## Objective
-[Brief Objective - Remove this afterwards]
 
-The Detection Lab project aimed to establish a controlled environment for simulating and detecting cyber attacks. The primary focus was to ingest and analyze logs within a Security Information and Event Management (SIEM) system, generating test telemetry to mimic real-world attack scenarios. This hands-on experience was designed to deepen understanding of network security, attack patterns, and defensive strategies.
+The goal of this project is to set up a comprehensive Security Operations Center (SOC) stack lab using open-source tools to enhance network monitoring and security analysis. The SOC stack will be implemented on a physical server in my home lab environment.
+
+The core components of the stack include:
+
+Wazuh: Deployed as the primary Security Information and Event Management (SIEM) solution, Wazuh will provide real-time security monitoring, log analysis, and threat detection.
+Grafana: Integrated with Wazuh to visualize and analyze security metrics and logs through dynamic dashboards and graphical representations.
+
+This setup aims to monitor network activities effectively, detect potential security threats, and gain insights into system performance. The lab will serve as a practical environment for testing and refining SOC operations, enhancing my ability to manage and respond to security incidents in a controlled setting.
 
 ### Skills Learned
 [Bullet Points - Remove this afterwards]
