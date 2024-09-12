@@ -24,63 +24,237 @@ The core components of the stack include:
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Project Steps
-### Setting Up Wazuh
+# Wazuh-Indexer Installation Guide
 
-**1. Preparation**
+## Overview
 
-- **Update and Upgrade System:** Ensure the server’s package list and software are up-to-date.
-- **Install Dependencies:** Install any required dependencies for Wazuh components.
+This guide will walk you through the installation and configuration of Wazuh-Indexer, which will store and manage security logs for our SIEM stack. Wazuh-Indexer is a fork of OpenSearch, which was originally based on Elasticsearch 7.10.2.
 
-**2. Install Wazuh Manager**
+## Table of Contents
 
-- **Add Wazuh Repository:** Add the Wazuh GPG key and repository to the server.
-- **Install Wazuh Manager:** Use the package manager to install the Wazuh Manager.
-- **Configure Wazuh Manager:** Edit the configuration files (typically found in `/var/ossec/etc/ossec.conf`) to set up basic parameters and ensure the Manager is set to listen on the correct network interfaces and ports.
-- **Start Wazuh Manager:** Enable and start the Wazuh Manager service.
+1. [Backend Storage](#backend-storage)
+2. [Log Ingestion](#log-ingestion)
+3. [Installation Steps](#installation-steps)
+   - [Certificates Creation](#certificates-creation)
+   - [Installation](#installation)
+   - [Configuration](#configuration)
+   - [Memory Locking](#memory-locking)
+   - [Cluster Initialization](#cluster-initialization)
+4. [Wazuh-Dashboard Installation](#wazuh-dashboard-installation)
 
-**3. Install Wazuh Indexer**
+## Backend Storage
 
-- **Install Wazuh Indexer:** Use the package manager to install the Wazuh Indexer.
-- **Configure Wazuh Indexer:** Edit the configuration files (usually located in `/etc/wazuh-indexer/`). Ensure that the Indexer is configured to communicate with the Wazuh Manager and adjust settings to bind to the appropriate interfaces.
-- **Start Wazuh Indexer:** Enable and start the Wazuh Indexer service.
+The Wazuh-Indexer will store all collected security logs, providing a scalable and reliable solution for search and analysis.
 
-**4. Install Wazuh Dashboard**
+### Key Components
 
-- **Install Wazuh Dashboard:** Use the package manager to install the Wazuh Dashboard.
-- **Configure Wazuh Dashboard:** Edit the configuration files (found in `/etc/wazuh-dashboard/`) to map the Dashboard to the Wazuh Manager and Indexer. This includes setting the correct URLs and authentication details so that the Dashboard can communicate with the other Wazuh components.
-- **Start Wazuh Dashboard:** Enable and start the Wazuh Dashboard service.
+- **Master Node:** Manages cluster-wide settings and operations.
+- **Data Node:** Stores and searches data, performing all data-related operations.
+- **Ingest Node:** Pre-processes data before storing it.
 
-**5. Configuration Adjustments**
+**Note:** For a more detailed understanding of node types, refer to the [OpenSearch documentation](https://opensearch.org/docs/latest/opensearch/cluster/).
 
-- **Service Mapping:** Ensure that all services (Manager, Indexer, Dashboard) are correctly mapped to the server’s internal IP address or hostname. Update configuration files to reflect that all components are hosted on the same server.
-- **Network and Port Settings:** Verify that the ports used by Wazuh components are open and correctly configured in the firewall and networking settings.
-- **Verify Connections:** Ensure that the Wazuh Manager, Indexer, and Dashboard can communicate with each other correctly. Test and confirm that logs and metrics are flowing properly between the services.
+**High Availability:** Wazuh-Indexer nodes can be clustered to ensure high availability. For example, if a master node fails, other nodes will handle the load.
 
-### Setting Up Grafana
+## Log Ingestion
 
-**1. Configure Wazuh for Grafana Integration**
+Data in Wazuh-Indexer is organized into indices and shards. Ensure that you have at least one replica shard for high availability. 
 
-- **Verify Wazuh Indexer:** Ensure that the Wazuh Indexer is properly configured and running, as Grafana will query data from it.
-- **Access Wazuh API:** Confirm that the Wazuh API is accessible and properly configured to allow Grafana to pull data. The API endpoint is typically used for querying data.
+**Disk Sizing:** Properly size your disk space based on data retention needs and log types. SSDs are recommended for production environments.
 
-**2. Add Wazuh as a Data Source in Grafana**
+## Installation Steps
 
-- **Navigate to Configuration > Data Sources.**
-- **Click on Add data source.**
-- **Select Wazuh or Elasticsearch** (if Wazuh uses Elasticsearch as the backend).
-- **Configure Data Source:**
-  - **URL:** Enter the URL of the Wazuh API or Elasticsearch instance. This is where Grafana will send queries to.
-  - **Index Name:** Specify the index pattern if you are using Elasticsearch.
-  - **Authentication:** Set up any required authentication methods if needed (e.g., API keys or credentials).
-  - **Test Connection:** Click Save & Test to verify that Grafana can connect to the Wazuh Indexer or Elasticsearch.
+### Certificates Creation
 
-**3. Create Grafana Dashboards**
+1. Download the certificate creation script and configuration file:
 
-- **Create a New Dashboard:**
-  - Go to the + icon in the sidebar and select Dashboard.
-  - Click Add new panel to start building visualizations.
-- **Configure Panels:**
-  - **Query Data:** Use the query editor to fetch data from Wazuh or Elasticsearch. You can create queries to display logs, alerts, and other security metrics.
-  - **Visualizations:** Choose the type of visualizations you want (graphs, tables, charts) based on the data you are querying.
-  - **Customize Panels:** Configure the appearance and settings of each panel according to your needs.
+    ```bash
+    curl -sO https://packages.wazuh.com/4.3/wazuh-certs-tool.sh
+    curl -sO https://packages.wazuh.com/4.3/config.yml
+    ```
+
+2. Edit `config.yml` to replace node names and IP addresses:
+
+    ```yaml
+    nodes:
+      indexer:
+        - name: node-1
+          ip: <indexer-node-ip>
+    ```
+
+3. Run the certificate creation script:
+
+    ```bash
+    bash ./wazuh-certs-tool.sh -A
+    tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ .
+    ```
+
+### Installation
+
+1. Install required packages:
+
+    ```bash
+    apt-get install debconf adduser procps
+    apt-get install gnupg apt-transport-https
+    ```
+
+2. Import the GPG key:
+
+    ```bash
+    curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
+    ```
+
+3. Add the Wazuh repository:
+
+    ```bash
+    echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
+    ```
+
+4. Install Wazuh-Indexer:
+
+    ```bash
+    apt-get update
+    apt-get -y install wazuh-indexer
+    ```
+
+### Configuration
+
+1. Edit `/etc/wazuh-indexer/opensearch.yml`:
+
+    ```yaml
+    network.host: <node-address>
+    node.name: <node-name>
+    cluster.initial_master_nodes:
+      - "node-1"
+      - "node-2"
+      - "node-3"
+    discovery.seed_hosts:
+      - "10.0.0.1"
+      - "10.0.0.2"
+      - "10.0.0.3"
+    plugins.security.nodes_dn:
+      - "CN=node-1,OU=Wazuh,O=Wazuh,L=California,C=US"
+      - "CN=node-2,OU=Wazuh,O=Wazuh,L=California,C=US"
+      - "CN=node-3,OU=Wazuh,O=Wazuh,L=California,C=US"
+    ```
+
+2. Set `bootstrap.memory_lock` and limit memory usage:
+
+    ```bash
+    nano /etc/wazuh-indexer/opensearch.yml
+    # Add the line
+    bootstrap.memory_lock: true
+
+    nano /usr/lib/systemd/system/wazuh-indexer.service
+    # Add the line
+    LimitMEMLOCK=infinity
+
+    nano /etc/wazuh-indexer/jvm.options
+    # Set heap size
+    -Xms4g
+    -Xmx4g
+    ```
+
+3. Start the service:
+
+    ```bash
+    systemctl daemon-reload
+    systemctl enable wazuh-indexer
+    systemctl start wazuh-indexer
+    ```
+
+### Cluster Initialization
+
+1. Initialize the cluster:
+
+    ```bash
+    /usr/share/wazuh-indexer/bin/indexer-security-init.sh
+    ```
+
+2. Verify the cluster status:
+
+    ```bash
+    curl -k -u admin:admin https://<WAZUH_INDEXER_IP>:9200/_cat/nodes?v
+    ```
+
+## Wazuh-Dashboard Installation
+
+The Wazuh-Dashboard provides a WebUI for interacting with the Wazuh-Indexer cluster.
+
+### Installation
+
+1. Install required packages:
+
+    ```bash
+    apt-get install debhelper tar curl libcap2-bin
+    ```
+
+2. Import the GPG key:
+
+    ```bash
+    curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
+    ```
+
+3. Add the repository:
+
+    ```bash
+    echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
+    ```
+
+4. Install Wazuh-Dashboard:
+
+    ```bash
+    apt-get update
+    apt-get -y install wazuh-dashboard
+    ```
+
+### Configuration
+
+1. Edit `/etc/wazuh-dashboard/opensearch_dashboards.yml`:
+
+    ```yaml
+    server.host: 0.0.0.0
+    server.port: 443
+    opensearch.hosts: ["https://localhost:9200"]
+    opensearch.ssl.verificationMode: certificate
+    ```
+
+2. Deploy certificates:
+
+    ```bash
+    NODE_NAME=<dashboard-node-name>
+    ```
+
+3. Start the service:
+
+    ```bash
+    systemctl daemon-reload
+    systemctl enable wazuh-dashboard
+    systemctl start wazuh-dashboard
+    ```
+
+4. Configure Wazuh-Dashboard:
+
+    ```bash
+    nano /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
+    # Replace with Wazuh server IP or hostname
+    hosts:
+      - default:
+        url: https://localhost
+        port: 55000
+        username: wazuh-wui
+        password: wazuh-wui
+        run_as: false
+    ```
+
+5. Secure the installation:
+
+    ```bash
+    /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh --change-all
+    echo <kibanaserver-password> | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password
+    systemctl restart wazuh-dashboard
+    ```
+
+## Conclusion
+
+This guide covers the installation and configuration of Wazuh-Indexer and Wazuh-Dashboard. With these components, you will have a scalable backend storage solution for managing and analyzing security logs.
