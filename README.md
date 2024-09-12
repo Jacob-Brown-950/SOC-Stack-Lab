@@ -24,10 +24,6 @@ The core components of the stack include:
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# The Project
-
-# Wazuh Installation Guide
-
 ## Table of Contents
 
 1. [Introduction](#introduction)
