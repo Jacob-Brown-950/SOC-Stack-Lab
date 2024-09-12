@@ -24,11 +24,7 @@ The core components of the stack include:
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Wazuh-Indexer Installation Guide
-
-## Overview
-
-This guide will walk you through the installation and configuration of Wazuh-Indexer, which will store and manage security logs for our SIEM stack. Wazuh-Indexer is a fork of OpenSearch, which was originally based on Elasticsearch 7.10.2.
+# The Project
 
 ## Table of Contents
 
@@ -254,7 +250,3 @@ The Wazuh-Dashboard provides a WebUI for interacting with the Wazuh-Indexer clus
     echo <kibanaserver-password> | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password
     systemctl restart wazuh-dashboard
     ```
-
-## Conclusion
-
-This guide covers the installation and configuration of Wazuh-Indexer and Wazuh-Dashboard. With these components, you will have a scalable backend storage solution for managing and analyzing security logs.
