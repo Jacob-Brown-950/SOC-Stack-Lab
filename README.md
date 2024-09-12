@@ -13,31 +13,43 @@ Grafana: Separate Dashboard Integrated with Wazuh to visualize and analyze secur
 ### Skills Learned
 
 - Advanced understanding of SIEM concepts and practical application.
+  
 - Proficiency in analyzing and interpreting network logs.
+  
 - Ability to generate and recognize attack signatures and patterns.
+  
 - Enhanced knowledge of network protocols and security vulnerabilities.
+  
 - Development of critical thinking and problem-solving skills in cybersecurity.
+  
 
 ### Tools Used
 
 - Security Information and Event Management (SIEM) system for log ingestion and analysis.
+  
 - Pentesting tools to create realistic network traffic and attack scenarios.
 
 ## Setting Up Wazuh
 
 **1. Preparation**
 Update and Upgrade System: Ensure the server’s package list and software are up-to-date.
+
 Install Dependencies: Install any required dependencies for Wazuh components.
 
 **2. Install Wazuh Manager**
 Add Wazuh Repository: Add the Wazuh GPG key and repository to the server.
+
 Install Wazuh Manager: Use the package manager to install the Wazuh Manager.
+
 Configure Wazuh Manager: Edit the configuration files (typically found in /var/ossec/etc/ossec.conf) to set up basic parameters and ensure the Manager is set to listen on the correct network interfaces and ports.
+
 Start Wazuh Manager: Enable and start the Wazuh Manager service.
 
 **3. Install Wazuh Indexer**
 Install Wazuh Indexer: Use the package manager to install the Wazuh Indexer.
+
 Configure Wazuh Indexer: Edit the configuration files to set up the Indexer. The configuration files are usually located in /etc/wazuh-indexer/. Ensure that the Indexer is configured to communicate with the Wazuh Manager and adjust settings to bind to the appropriate interfaces.
+
 Start Wazuh Indexer: Enable and start the Wazuh Indexer service.
 
 **4. Install Wazuh Dashboard**
