@@ -23,7 +23,8 @@ The core components of the stack include:
 - **Security Information and Event Management (SIEM) system:** For log ingestion and analysis.
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
 
-## Setting Up Wazuh
+# Project Steps
+### Setting Up Wazuh
 
 **1. Preparation**
 
