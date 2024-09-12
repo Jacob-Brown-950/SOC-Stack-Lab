@@ -22,6 +22,7 @@ The core components of the stack include:
 
 - **Security Information and Event Management (SIEM) system:** For log ingestion and analysis.
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Project Steps
 ### Setting Up Wazuh
@@ -56,7 +57,7 @@ The core components of the stack include:
 - **Network and Port Settings:** Verify that the ports used by Wazuh components are open and correctly configured in the firewall and networking settings.
 - **Verify Connections:** Ensure that the Wazuh Manager, Indexer, and Dashboard can communicate with each other correctly. Test and confirm that logs and metrics are flowing properly between the services.
 
-## Setting Up Grafana
+### Setting Up Grafana
 
 **1. Configure Wazuh for Grafana Integration**
 
