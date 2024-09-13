@@ -7,8 +7,6 @@ The goal of this project is to set up a comprehensive Security Operations Center
 The core components of the stack include:
 
 - **Wazuh:** Deployed as the primary Security Information and Event Management (SIEM) solution. Wazuh will provide real-time security monitoring, log analysis, and threat detection.
-  
-- **Grafana:** A separate dashboard integrated with Wazuh to visualize and analyze security metrics and logs through dynamic dashboards and graphical representations. Grafana is used due to its efficient data handling compared to Kibana.
 
 ### Skills Learned
 
