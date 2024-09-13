@@ -22,7 +22,6 @@ The core components of the stack include:
 
 - **Security Information and Event Management (SIEM) system:** For log ingestion and analysis.
 - **Pentesting tools:** To create realistic network traffic and attack scenarios.
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Table of Contents
 
@@ -39,8 +38,12 @@ The core components of the stack include:
     - [Installation](#installation-2)
     - [Configuration](#configuration-2)
     - [Verification](#verification-2)
-5. [Final Configuration](#final-configuration)
-6. [Troubleshooting](#troubleshooting)
+5. [Deploying Wazuh Agent](#deploying-wazuh-agent)
+    - [Installation](#installation-3)
+    - [Configuration](#configuration-3)
+    - [Simulating Alerts](#simulating-alerts)
+6. [Final Configuration](#final-configuration)
+7. [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -304,6 +307,28 @@ The Wazuh-Dashboard provides a WebUI for interacting with the Wazuh-Indexer clus
     /var/ossec/bin/ossec-control status
     ```
 
+## Deploying Wazuh Agent
+
+Deploying the Wazuh agent on client machines is crucial for log collection and threat detection. Below is a brief overview of the deployment process and the activities performed to generate alerts.
+
+### Installation
+
+1. **Generate and Deploy the Wazuh Agent Installation Script:**
+   - For Mac, Linux, and Windows it's all the same. Generate a script for the appropriate OS and run it in as an administrator on the endpoint.
+
+### Simulating Alerts
+
+1. **Simulate Failed SSH Login Attempts:**
+   - Use Hydra to perform brute-force attacks and generate failed SSH login attempt logs.
+
+2. **Generate Port Scanning Logs:**
+   - Utilize Nmap to scan ports on the target systems, creating additional log entries.
+
+3. **Assess Cybersecurity Hygiene:**
+   - Review the assessments and recommendations provided by the Wazuh agent. For example, the agent may highlight weak practices such as using default account names like "admin" or "user", which could give attackers an advantage.
+
+By deploying the Wazuh agent and simulating various activities, you can verify the effectiveness of your security setup and improve your overall cybersecurity posture based on the agent's recommendations.
+
 ## Final Configuration
 
 1. **Ensure Integration:**
@@ -330,4 +355,4 @@ The Wazuh-Dashboard provides a WebUI for interacting with the Wazuh-Indexer clus
   - Check agent logs: `/var/ossec/logs/ossec.log`.
   - Ensure that Wazuh-Manager and Wazuh-Dashboard are reachable.
 
-This guide covers the essential steps for setting up Wazuh components. Refer to the Wazuh documentation for advanced configurations and additional details.
+This guide covers the essential steps for setting up Wazuh components and deploying the Wazuh agent. Refer to the Wazuh documentation for advanced configurations and additional details.
