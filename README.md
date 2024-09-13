@@ -6,7 +6,9 @@ The goal of this project is to set up a comprehensive Security Operations Center
 
 The core components of the stack include:
 
-- **Wazuh:** Deployed as the primary Security Information and Event Management (SIEM) solution. Wazuh will provide real-time security monitoring, log analysis, and threat detection.
+- **Wazuh Indexer:** Backend storage for ingested logs
+- **Wazuh Manager:** Log cleanup and formatting, receives logs from the deployed agents
+- **Wazuh Dashboard:** Central visualization for data collected
 
 ### Skills Learned
 
