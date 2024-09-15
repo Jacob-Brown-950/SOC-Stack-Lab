@@ -354,5 +354,3 @@ By deploying the Wazuh agent and simulating various activities, you can verify t
 - **Agent Communication Issues:**
   - Check agent logs: `/var/ossec/logs/ossec.log`.
   - Ensure that Wazuh-Manager and Wazuh-Dashboard are reachable.
-
-This guide covers the essential steps for setting up Wazuh components and deploying the Wazuh agent. Refer to the Wazuh documentation for advanced configurations and additional details.
